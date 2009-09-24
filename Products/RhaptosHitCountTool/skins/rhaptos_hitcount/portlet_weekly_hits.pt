@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="rhaptos">
+
+<body>
+
+<tal:comment>
+i18n by sanca
+</tal:comment>
+<!-- Recent top 5   -->
+    
+    <div metal:define-macro="portlet"
+      tal:define="results python:here.portal_hitcount.getHitCounts(recent=True)[:5];"
+      tal:condition="results">
+      
+      <dl class="portlet" id="portlet-hits">
+        
+        <dt class="portletHeader">
+          <span class="portletTopLeft"></span>
+          <span i18n:translate="box_portlethits_Title">Popular Last Week</span>
+          <span class="portletTopRight"></span>
+        </dt>
+
+        <tal:block tal:repeat="stat results">
+          <dd tal:define="object python:here.content.hasRhaptosObject(stat[0]) and here.content.getRhaptosObject(stat[0], 'latest')" 
+            tal:condition="nocall:object"
+            tal:attributes="class python:'portletItem ' + test(path('repeat/stat/odd'), 'odd','even')" >
+            <a tal:attributes="href object/url"><img tal:replace="structure python:path('here/%s' % object.getIcon())" /></a> 
+            <a tal:content="object/title" tal:attributes="href object/url">[title]</a>
+          </dd>
+        </tal:block>
+        <dd class="portletMore">
+          <strong><a tal:attributes="href string:${portal_url}/content/browse_popularity" href="/content/browse_popularity" i18n:translate="box_portlethits_Extra">More...</a></strong>
+          
+          <span class="portletBottomLeft"></span>
+          <span class="portletBottomRight"></span>
+          
+        </dd>
+      </dl>
+    </div>
+    
+  </body>
+  
+</html>
+

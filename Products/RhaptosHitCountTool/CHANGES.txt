@@ -1,0 +1,41 @@
+HitCountTool-0.9.1
+  - Change regex to handle rewritten squid 2.7 logfiles.
+
+HitCountTool-0.9
+  - Added dumpHitCounts and restoreHitCounts methods to allow serializing data
+
+HitCountTool-0.8.1
+  - templates tweaked to pass through xsltproc
+
+HitCountTool-0.8
+  - upgrade to Plone 2.5
+
+HitCountTool-0.7
+  - calculate stats over correct date interval
+
+HitCountTool-0.6.2
+  - fix updating data cache (bad tuple assignment)
+
+HitCountTool-0.6.1
+  - newlook bugfix: removed obsolete and ugly macro from content_statistics page
+
+HitCountTool-0.6
+  - March 2007 site redesign (newlook)
+  - major search refactoring and improvements
+  - new content browse structures
+
+HitCountTool-0.5
+  - i18n Translation Support
+
+HitCountTool-0.4
+  - Renamed RISA to Rhaptos
+  - Moved getRankForObject to skins
+
+HitCountTool-0.3
+  - Fix style problem with content_statistics page
+
+HitCountTool-0.2
+  - Use Title() accessor
+
+HitCountTool-0.1
+  - Initial release
