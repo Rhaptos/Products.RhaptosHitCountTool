@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object name="portal_skins" meta_type="Plone Skins Tool">
+  <object name="rhaptos_hitcount" meta_type="Filesystem Directory View"
+      directory="Products.RhaptosHitCountTool/skins/rhaptos_hitcount"/>
+  <skin-path name="*">
+    <layer name="rhaptos_hitcount" insert-after="custom"/>
+  </skin-path>
+</object>
+

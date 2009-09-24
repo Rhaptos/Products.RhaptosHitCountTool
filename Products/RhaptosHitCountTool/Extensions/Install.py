@@ -1,27 +1,11 @@
-from Products.Archetypes.Extensions.utils import install_subskin
+
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.DirectoryView import addDirectoryViews
-from Products.RhaptosHitCountTool import product_globals as GLOBALS
-from StringIO import StringIO
-import string
 
-def install(self):
-    """Add the tool"""
-    out = StringIO()
+def install(portal):
+    portal_setup = getToolByName(portal, 'portal_setup')
+    import_context = portal_setup.getImportContextID()
+    portal_setup.setImportContext(
+            'profile-Products.RhaptosHitCountTool:default')
+    portal_setup.runAllImportSteps()
+    portal_setup.setImportContext(import_context)
 
-    # Add the tool
-    urltool = getToolByName(self, 'portal_url')
-    portal = urltool.getPortalObject();
-    try:
-        portal.manage_delObjects('portal_hitcount')
-        out.write("Removed old portal_hitcount tool\n")
-    except:
-        pass  # we don't care if it fails
-    portal.manage_addProduct['RhaptosHitCountTool'].manage_addTool('HitCount Tool', None)
-
-    # Register skins
-    install_subskin(self, out, GLOBALS)
-    
-    out.write("Adding HitCount Tool\n")
-
-    return out.getvalue()
