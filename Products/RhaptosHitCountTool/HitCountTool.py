@@ -59,6 +59,10 @@ class HitCountTool(UniqueObject, SimpleItem):
         """Register an object with the HitCountTool"""
 
         self._hits[objectId] = Hits(published_date, self)
+        self._recent_hit_counts.append((objectId,0))
+        self._hit_counts.append((objectId,0))
+        self._recent_daily_averages.append((objectId,0))
+        self._daily_averages.append((objectId,0))
         self._p_changed = 1
         
     def listRegisteredObjects(self):
