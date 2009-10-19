@@ -10,7 +10,8 @@
 i18n by sanca
 </tal:comment>
 
-<link rel="stylesheet" href="content_browse.css" type="text/css" metal:fill-slot="css_slot" />
+<link rel="stylesheet" href="content_browse.css" type="text/css" metal:fill-slot="css_slot" 
+      tal:attributes="string:$portal_url/content_browse.css;"/>
   <body>
     
     <div metal:fill-slot="main" id="content" 
