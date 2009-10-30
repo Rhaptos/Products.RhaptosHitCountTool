@@ -24,17 +24,21 @@ $Id: $
 """
 
 
+from Products.RhaptosTest import config
 import Products.RhaptosHitCountTool
+config.products_to_load_zcml = [('configure.zcml', Products.RhaptosHitCountTool),]
+config.products_to_install = ['RhaptosHitCountTool']
 
-from Products.RhaptosTest.base import RhaptosTestCase
+from Products.RhaptosTest import base
 
 
-class TestRhaptosHitCountTool(RhaptosTestCase):
+class TestRhaptosHitCountTool(base.RhaptosTestCase):
 
-    products_to_load_zcml = [('configure.zcml', Products.RhaptosHitCountTool),]
+    def afterSetUp(self):
+        pass
 
-    def setUp(self):
-        RhaptosTestCase.setUp(self)
+    def beforeTearDown(self):
+        pass
 
     def test_hit_count_tool(self):
         self.assertEqual(1, 1)
