@@ -30,7 +30,10 @@ config.products_to_load_zcml = [('configure.zcml', Products.RhaptosHitCountTool)
 config.products_to_install = ['RhaptosHitCountTool']
 config.extension_profiles = ['Products.RhaptosHitCountTool:default']
 
+import DateTime
+
 from Products.CMFCore.utils import getToolByName
+from Products.RhaptosHitCountTool.interfaces.portal_hitcount import portal_hitcount as IHitCountTool
 from Products.RhaptosTest import base
 
 
@@ -42,8 +45,27 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
     def beforeTearDown(self):
         pass
 
-    def test_hit_count_tool(self):
-        self.assertEqual(1, 1)
+    def test_hit_count_tool_interface(self):
+        # Make sure that the hit count tool implements the expected interface.
+        self.failUnless(IHitCountTool.isImplementedBy(self.hit_count_tool))
+
+    def test_hit_count_tool_init_values(self):
+        # Make sure that the initial values are sane.
+        self.assertEqual(self.hit_count_tool._hits, {})
+        self.assertEqual(self.hit_count_tool._recent_hit_counts, [])
+        self.assertEqual(self.hit_count_tool._hit_counts, [])
+        self.assertEqual(self.hit_count_tool._recent_daily_averages, [])
+        self.assertEqual(self.hit_count_tool._daily_averages, [])
+        self.assertEqual(self.hit_count_tool._inc_begin, self.hit_count_tool._startdate)
+        self.assertEqual(self.hit_count_tool._inc_end, self.hit_count_tool._startdate)
+        self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 0)
+
+    def test_hit_count_tool_register_object(self):
+        # Register an object.
+        self.hit_count_tool.registerObject(self.folder, DateTime.DateTime())
+        self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 1)
+        registered_object = self.hit_count_tool.listRegisteredObjects()[0]
+        self.assertEqual(registered_object.getId(), self.folder.getId())
 
 
 def test_suite():
