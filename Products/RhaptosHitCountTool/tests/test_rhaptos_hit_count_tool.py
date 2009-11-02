@@ -76,6 +76,12 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
         registered_object = self.hit_count_tool.listRegisteredObjects()[1]
         self.assertEqual(registered_object.getId(), self.doc.getId())
 
+        # Re-register the first object.
+        self.hit_count_tool.registerObject(self.folder, DateTime.DateTime())
+        self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 2)
+        registered_object = self.hit_count_tool.listRegisteredObjects()[0]
+        self.assertEqual(registered_object.getId(), self.folder.getId())
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite
