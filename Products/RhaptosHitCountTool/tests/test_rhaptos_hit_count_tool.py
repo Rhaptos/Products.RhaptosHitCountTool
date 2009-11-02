@@ -40,7 +40,10 @@ from Products.RhaptosTest import base
 class TestRhaptosHitCountTool(base.RhaptosTestCase):
 
     def afterSetUp(self):
+        self.loginAsPortalOwner()
         self.hit_count_tool = getToolByName(self.portal, 'portal_hitcount')
+        self.folder.invokeFactory('Document', 'doc')
+        self.doc = self.folder.doc
 
     def beforeTearDown(self):
         pass
@@ -60,12 +63,18 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
         self.assertEqual(self.hit_count_tool._inc_end, self.hit_count_tool._startdate)
         self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 0)
 
-    def test_hit_count_tool_register_object(self):
+    def test_hit_count_tool_register_and_list_objects(self):
         # Register an object.
         self.hit_count_tool.registerObject(self.folder, DateTime.DateTime())
         self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 1)
         registered_object = self.hit_count_tool.listRegisteredObjects()[0]
         self.assertEqual(registered_object.getId(), self.folder.getId())
+
+        # Register another object.
+        self.hit_count_tool.registerObject(self.doc, DateTime.DateTime())
+        self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 2)
+        registered_object = self.hit_count_tool.listRegisteredObjects()[1]
+        self.assertEqual(registered_object.getId(), self.doc.getId())
 
 
 def test_suite():
