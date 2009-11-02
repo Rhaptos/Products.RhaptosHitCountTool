@@ -82,6 +82,14 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
         registered_object = self.hit_count_tool.listRegisteredObjects()[0]
         self.assertEqual(registered_object.getId(), self.folder.getId())
 
+    def test_hit_count_tool_start_date(self):
+        # Make sure that we can get and set the start date from which to gather
+        # analytics data.
+        now = DateTime.DateTime()
+        self.assertNotEqual(self.hit_count_tool.getStartDate(), now)
+        self.hit_count_tool.setStartDate(now)
+        self.assertEqual(self.hit_count_tool.getStartDate(), now)
+
 
 def test_suite():
     from unittest import TestSuite, makeSuite
