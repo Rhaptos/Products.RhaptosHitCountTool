@@ -42,6 +42,9 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
     def afterSetUp(self):
         self.loginAsPortalOwner()
         self.hit_count_tool = getToolByName(self.portal, 'portal_hitcount')
+
+        # PloneTestCase already gives us a folder, so within that folder,
+        # create a document and a collection to version.
         self.folder.invokeFactory('Document', 'doc')
         self.doc = self.folder.doc
 
