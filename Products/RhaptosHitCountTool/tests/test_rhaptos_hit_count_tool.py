@@ -142,6 +142,38 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
         self.assertEqual(self.hit_count_tool.getHitCountForObject(self.folder.getId()), 2)
         self.assertEqual(self.hit_count_tool.getHitCountForObject(self.doc.getId()), 0)
 
+    def test_hit_count_tool_averages_and_percentiles(self):
+        # Make sure that there are no registered objects.
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 0)
+
+        # Register an object.
+        self.hit_count_tool.registerObject(self.folder.getId(), DateTime.DateTime())
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 1)
+
+        # Register another object.
+        self.hit_count_tool.registerObject(self.doc.getId(), DateTime.DateTime())
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 2)
+
+        # Increment the hit count for the first registered object.
+        mapping = {self.folder.getId(): 2}
+        self.hit_count_tool.incrementCounts(mapping)
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(hit_counts[0], (self.folder.getId(), 2))
+
+        # Test the daily average hit counts.
+        daily_averages = self.hit_count_tool.getDailyAverages()
+        self.assertEqual(daily_averages[0], (self.folder.getId(), 2))
+        self.assertEqual(daily_averages[1], (self.doc.getId(), 0))
+        self.assertEqual(self.hit_count_tool.getDailyAverageForObject(self.folder.getId()), 2)
+        self.assertEqual(self.hit_count_tool.getDailyAverageForObject(self.doc.getId()), 0)
+
+        # Test the percentiles.
+        self.assertEqual(self.hit_count_tool.getPercentileForObject(self.folder.getId()), 50.0)
+        self.assertEqual(self.hit_count_tool.getPercentileForObject(self.doc.getId()), 0.0)
+
     def test_hit_count_tool_reset_counts(self):
         # Make sure that there are no registered objects.
         hit_counts = self.hit_count_tool.getHitCounts()
