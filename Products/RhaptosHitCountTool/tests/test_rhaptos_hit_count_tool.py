@@ -68,22 +68,22 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
 
     def test_hit_count_tool_register_and_list_objects(self):
         # Register an object.
-        self.hit_count_tool.registerObject(self.folder, DateTime.DateTime())
+        self.hit_count_tool.registerObject(self.folder.getId(), DateTime.DateTime())
         self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 1)
         registered_object = self.hit_count_tool.listRegisteredObjects()[0]
-        self.assertEqual(registered_object.getId(), self.folder.getId())
+        self.assertEqual(registered_object, self.folder.getId())
 
         # Register another object.
-        self.hit_count_tool.registerObject(self.doc, DateTime.DateTime())
-        self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 2)
-        registered_object = self.hit_count_tool.listRegisteredObjects()[1]
-        self.assertEqual(registered_object.getId(), self.doc.getId())
-
-        # Re-register the first object.
-        self.hit_count_tool.registerObject(self.folder, DateTime.DateTime())
+        self.hit_count_tool.registerObject(self.doc.getId(), DateTime.DateTime())
         self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 2)
         registered_object = self.hit_count_tool.listRegisteredObjects()[0]
-        self.assertEqual(registered_object.getId(), self.folder.getId())
+        self.assertEqual(registered_object, self.doc.getId())
+
+        # Re-register the first object.
+        self.hit_count_tool.registerObject(self.folder.getId(), DateTime.DateTime())
+        self.assertEqual(len(self.hit_count_tool.listRegisteredObjects()), 2)
+        registered_object = self.hit_count_tool.listRegisteredObjects()[1]
+        self.assertEqual(registered_object, self.folder.getId())
 
     def test_hit_count_tool_start_date(self):
         # Make sure that we can get and set the start date from which to gather
@@ -92,6 +92,37 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
         self.assertNotEqual(self.hit_count_tool.getStartDate(), now)
         self.hit_count_tool.setStartDate(now)
         self.assertEqual(self.hit_count_tool.getStartDate(), now)
+
+    def test_hit_count_tool_increment_counts(self):
+        # Make sure that there are no registered objects.
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 0)
+
+        # Register an object.
+        self.hit_count_tool.registerObject(self.folder.getId(), DateTime.DateTime())
+
+        # Make sure that incrementCounts raises a TypeError when supplied with
+        # a mapping that isn't a dict.
+        mapping = None
+        self.assertRaises(TypeError, self.hit_count_tool.incrementCounts, mapping)
+
+        # Make sure that incrementCounts succeeds when supplied with an empty
+        # mapping.
+        mapping = {}
+        self.hit_count_tool.incrementCounts(mapping)
+
+        # Make sure that the newly registered object has a hit count of 0.
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 1)
+        self.assertEqual(hit_counts[0], (self.folder.getId(), 0))
+
+        # Increment the hit count for the registered object, and make sure that
+        # it gets updated.
+        mapping = {self.folder.getId(): 1}
+        self.hit_count_tool.incrementCounts(mapping)
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 1)
+        self.assertEqual(hit_counts[0], (self.folder.getId(), 1))
 
 
 def test_suite():
