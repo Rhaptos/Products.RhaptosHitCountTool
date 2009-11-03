@@ -93,7 +93,7 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
         self.hit_count_tool.setStartDate(now)
         self.assertEqual(self.hit_count_tool.getStartDate(), now)
 
-    def test_hit_count_tool_increment_counts(self):
+    def test_hit_count_tool_increment_and_get_counts(self):
         # Make sure that there are no registered objects.
         hit_counts = self.hit_count_tool.getHitCounts()
         self.assertEqual(len(hit_counts), 0)
@@ -123,6 +123,39 @@ class TestRhaptosHitCountTool(base.RhaptosTestCase):
         hit_counts = self.hit_count_tool.getHitCounts()
         self.assertEqual(len(hit_counts), 1)
         self.assertEqual(hit_counts[0], (self.folder.getId(), 1))
+
+        # Register another object.
+        self.hit_count_tool.registerObject(self.doc.getId(), DateTime.DateTime())
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 2)
+
+        # Increment the hit count for the first registered object.
+        mapping = {self.folder.getId(): 1}
+        self.hit_count_tool.incrementCounts(mapping)
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(hit_counts[0], (self.folder.getId(), 2))
+
+        # Make sure that the second registered object still has a hit count of 0.
+        self.assertEqual(hit_counts[1], (self.doc.getId(), 0))
+
+        # Make sure that we can get hit counts by object ID:
+        self.assertEqual(self.hit_count_tool.getHitCountForObject(self.folder.getId()), 2)
+        self.assertEqual(self.hit_count_tool.getHitCountForObject(self.doc.getId()), 0)
+
+    def test_hit_count_tool_reset_counts(self):
+        # Make sure that there are no registered objects.
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 0)
+
+        # Register an object.
+        self.hit_count_tool.registerObject(self.folder.getId(), DateTime.DateTime())
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 1)
+
+        # Reset the hit counts.
+        self.hit_count_tool.resetHitCounts()
+        hit_counts = self.hit_count_tool.getHitCounts()
+        self.assertEqual(len(hit_counts), 0)
 
 
 def test_suite():
