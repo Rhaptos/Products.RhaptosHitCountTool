@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      metal:use-macro="here/main_template/macros/master"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+	  i18n:domain="rhaptos">
+<tal:comment>
+by sanca
+</tal:comment>
+
+  <body>
+
+    <div metal:fill-slot="main" 
+         tal:define="Batch python:modules['Products.CMFPlone'].Batch;
+                     stats python:here.portal_hitcount.getHitCounts(recent=True);
+                     b_start request/b_start | python:0;
+	             b_size request/b_size | python:25;
+                     batch python:Batch(stats, b_size, int(b_start), orphan=1);">
+ 
+    
+      <h1 i18n:translate="heading_weeklyhitcnt_MainHeader" tal:define="range here/portal_hitcount/getIncrementDateRange">
+	Content Hit Counts for 
+	<span i18n:name="HitBeginDate"><tal:date tal:replace="python:here.toLocalizedTime(range[0])">[date]</tal:date></span> - <span i18n:name="HitEndDate"><tal:date tal:replace="python:here.toLocalizedTime(range[1])">[date]</tal:date></span>
+      </h1>
+    
+      <table class="listing">
+        <tr>
+          <th i18n:translate="listingheader_weeklyhitcnt_TableHeader1">Count</th>
+          <th i18n:translate="listingheader_weeklyhitcnt_TableHeader2">Content</th>
+        </tr>
+	<tal:row tal:repeat="stat batch">
+	  <tr tal:define="object python: here.content.hasRhaptosObject(stat[0]) and here.content.getRhaptosObject(stat[0]).latest" 
+	      tal:condition="object"
+              tal:attributes="class
+              python:test(path('repeat/stat/odd'),'odd','even')"
+	      tal:on-error="string: One or more object could not be displayed">
+		  <!-- FIXME: tal:on-error message hardcoded to English -->
+	  <td style="text-align: right" tal:content="python: stat[1]">
+	    999
+	  </td>
+	  <td >
+	      <a tal:attributes="href object/url"><img tal:replace="structure python:path('here/%s' % object.getIcon())" /></a> 
+	    <a tal:content="object/Title" tal:attributes="href object/url">[title]</a>
+	  </td>
+	</tr>
+	</tal:row>
+      </table>
+
+      <metal:block metal:use-macro="here/batch_macros/macros/navigation" />
+   
+  </div><!-- End of slot -->
+  </body>
+</html>

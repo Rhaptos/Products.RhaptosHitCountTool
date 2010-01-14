@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC  "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" 
+      xmlns:metal="http://xml.zope.org/namespaces/metal" 
+      xmlns:tal="http://xml.zope.org/namespaces/tal" 
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="rhaptos">
+
+<tal:comment>
+i18n by sanca
+</tal:comment>
+
+<link rel="stylesheet" href="content_browse.css" type="text/css" metal:fill-slot="css_slot" 
+      tal:attributes="string:$portal_url/content_browse.css;"/>
+  <body>
+    
+    <div metal:fill-slot="main" id="content" 
+         tal:define="objectId request/objectId;
+                     o python:here.content.getRhaptosObject(objectId).latest;">
+
+      <h1 i18n:translate = "heading_contentstats_StatisticsFor">Statistics for <span i18n:name="ModuleTitle"> <a tal:attributes="href o/url" tal:content="o/title">[title]</a></span></h1>
+
+      <tal:block tal:define="count python:here.portal_url.getPortalObject().content.countRhaptosObjects();
+	                     rank python:here.getHitCountRanking(objectId);
+	                     w_rank python:here.getHitCountRanking(objectId, recent=True);
+                             percentile	python:(count-rank)*100.0/count;
+	                     w_percentile python:(count-w_rank)*100.0/count;
+	                     hits python:here.portal_hitcount.getHitCountForObject(o.objectId);
+	                     range python:here.portal_hitcount.getIncrementDateRange();
+	                     w_hits python:here.portal_hitcount.getHitCountForObject(o.objectId, recent=True);">
+
+	<table border="0" cellspacing="0" cellpadding="0" id="statistics">
+	  <tbody>
+	    <tr>
+	      <th align="left" colspan="2">
+		<h2 i18n:translate="listingheader_contentstats_TableHeadingTop">Last week (<span tal:replace="python:here.toLocalizedTime(range[0])" i18n:name="BeginDate">Jan. 3, 2005</span> to <span tal:replace="python:here.toLocalizedTime(range[1])" i18n:name="EndDate">Jan. 10, 2005</span>)</h2>
+	      </th>
+	    </tr>
+	    <tr>
+	      <td class="cnx_before" valign="top" i18n:translate="text_contentstats_TopTableRow1">Hits:</td>
+	      <td valign="top"><strong tal:content="w_hits">[weekly hits]</strong></td>
+	    </tr>
+	<tr>
+	  <td class="cnx_before" valign="top" i18n:translate="text_contentstats_TopTableRow2Part1">Popularity&#160;rank:</td>
+	  <td valign="top" i18n:translate="text_contentstats_TopTableRow2Part2"><strong tal:content="w_rank" i18n:name="PopularityFractionTop">[weekly rank]</strong> of <strong tal:content="count" i18n:name="TotalObjectsTop">[count]</strong> total modules and courses in Connexions*<span i18n:name="TopComment"><div class="comment" i18n:translate="description_contentstats_ContentHitsTop">(This module gets more hits than <strong tal:content="python:'%.2f%%'%w_percentile" i18n:name="HitPercentageTop">[percentile]</strong> of the content in Connexions)</div></span>
+	  </td>
+	</tr>
+	    <tr>
+	      <th align="left" colspan="2">
+		<h2 i18n:translate="heading_contentstats_TableHeadingBottom">Ever</h2>
+	      </th>
+	    </tr>
+	    <tr>
+	      <td class="cnx_before" valign="top" i18n:translate="text_contentstats_BottomTableRow1">Hits:</td>
+	      <td><strong tal:content="hits">[hits]</strong></td>
+	    </tr>
+	    <tr>
+	      <td class="cnx_before" valign="top" i18n:translate="text_contentstats_BottomTableRow2Part1">Popularity&#160;rank:</td>
+	      <td i18n:translate="text_contentstats_BottomTableRow2Part2"><strong tal:content="rank" i18n:name="PopularityFractionBottom">[rank]</strong>  of <strong tal:content="count" i18n:name="TotalObjectsBottom">[count]</strong> total modules and courses in Connexions*
+		<span i18n:name="BottomComment"><div class="comment" i18n:translate="description_contentstats_ContentHitsBottom">(This module gets more hits than <strong tal:content="python:'%.2f%%'%percentile" i18n:name="HitPercentageBottom">[percentile]</strong> of the content in Connexions)</div></span>
+	  </td>
+	</tr>
+	</tbody>
+      </table>
+      </tal:block>
+
+      
+
+      <p i18n:translate="description_contentstats_FootNote">* the lower the number, the more popular the content
+      </p>
+
+
+    </div>
+
+  </body>
+</html>

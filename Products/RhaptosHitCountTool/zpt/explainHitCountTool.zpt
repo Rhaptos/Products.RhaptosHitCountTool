@@ -1,0 +1,17 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:tal="http://xml.zope.org/namespaces/tal" 
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n" tal:omit-tag=""
+	  i18n:domain = "rhaptos">
+  <span tal:replace="structure here/manage_page_header">Header</span>
+  <span tal:define="manage_tabs_message options/manage_tabs_message | nothing"
+    tal:replace="structure here/manage_tabs">Tabs</span>
+
+  <h3 i18n:translate = "heading_explainHitCnt_Toolname"> <span i18n:name = "HitCntName"><code i18n:translate = "text_explainHitCnt_Headingcode">portal_hitcount</code></span> Tool </h3>
+    
+  <p i18n:translate = "text_explainHitCnt_ToolDescription">
+   This tool provides something
+  </p>
+
+  
+  <span tal:replace="structure here/manage_page_footer">Footer</span>
+</html>
