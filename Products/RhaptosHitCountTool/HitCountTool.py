@@ -36,7 +36,12 @@ class HitCountTool(UniqueObject, SimpleItem):
                     )
 
     def __init__(self):
-        self.resetHitCounts()
+        self._hits={}
+        self._recent_hit_counts = []
+        self._hit_counts = []
+        self._recent_daily_averages = []
+        self._daily_averages = []
+        self._startdate = self._inc_begin = self._inc_end = DateTime.DateTime()
 
     ##   ZMI methods
     security.declareProtected(ManagePortal, 'manage_overview')
