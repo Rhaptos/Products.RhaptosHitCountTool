@@ -48,7 +48,10 @@ class HitCountTool(UniqueObject, SimpleItem):
         """
         Reset all hit counts to 0 and set the start date to the current date and time
         """
-        self._hits.clear()
+        if hasattr(self,'_hits'):
+            self._hits.clear()
+        else:
+            self._hits={}
         self._recent_hit_counts = []
         self._hit_counts = []
         self._recent_daily_averages = []
