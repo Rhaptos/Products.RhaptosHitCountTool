@@ -46,7 +46,7 @@ if __name__ == '__main__':
         for objectId in increment.keys():
             if not portal.content.hasRhaptosObject(objectId):
                 del increment[objectId]
-        objids=portal.content.objectIds(['Version Folder','ModuleVersionFolder'])
+        objids=portal.content.objectIds(['Version Folder','Module Version Folder'])
         for objid in objids:
             if not increment.has_key(objid):
                 increment[objid]=0

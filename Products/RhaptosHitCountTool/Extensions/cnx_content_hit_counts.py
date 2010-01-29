@@ -43,7 +43,7 @@ if __name__ == '__main__':
         for objectId in increment.keys():
             if not app.plone.content.hasRhaptosObject(objectId):
                 del increment[objectId]
-        objids=app.plone.content.objectIds(['Version Folder','ModuleVersionFolder'])
+        objids=app.plone.content.objectIds(['Version Folder','Module Version Folder'])
         for objid in objids:
             if not increment.has_key(objid):
                 increment[objid]=0

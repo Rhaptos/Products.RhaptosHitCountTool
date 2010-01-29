@@ -48,12 +48,15 @@ class HitCountTool(UniqueObject, SimpleItem):
         """
         Reset all hit counts to 0 and set the start date to the current date and time
         """
-        self._hits = {}
+        self._hits.clear()
         self._recent_hit_counts = []
         self._hit_counts = []
         self._recent_daily_averages = []
         self._daily_averages = []
         self._startdate = self._inc_begin = self._inc_end = DateTime.DateTime()
+        objs = self.content.objectValues(['Version Folder','Module Version Folder'])
+        for ob in objs:
+            self.registerObject(ob.id,ob.created())
 
     def registerObject(self, objectId, published_date):
         """Register an object with the HitCountTool"""
