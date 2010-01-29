@@ -7,7 +7,9 @@ RhaptosHitCountTool
   access to browser hit counts and statistics for content objects.
 
   NOTE: RhaptosHitCountTool does *not* detect browser hits.  It relies on
-  external scripts to parse server logs and input data.
+  external scripts to parse server logs and input data. An example script
+  specific to cnx.org and custom Squid logs is present in the Extensions
+  folder
 
 Future plans
 
@@ -16,6 +18,6 @@ Future plans
   - An SQL backend?
 
   - Store percentile information so it does not have to be
-    recalculated
+    recalculated [DONE]
 
   - Provide a graph of hits over time
