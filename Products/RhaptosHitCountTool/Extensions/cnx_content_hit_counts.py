@@ -5,9 +5,9 @@ import time
 from DateTime import DateTime
 
 # FIXME: don't hardcode this
-MODULE_PATTERN = re.compile('^/content/(m|col)([0-9]+)/([0-9.]+|latest/)$')
+MODULE_PATTERN = re.compile('^http://cnx\.org/(?:VirtualHostBase.*VirtualHostRoot/)?content/(m|col)([0-9]+)/[^/]*/$')
 
-def parseZ2Log(name):
+def parseSquidLog(name):
     f = gzip.open(name)
     try:
         f.readline()
@@ -20,37 +20,34 @@ def parseZ2Log(name):
     for line in f:
         data = line.split()
         if not start_time:
-            start_time = DateTime(' '.join(data[3:5])[1:-1])
-        if len(data) > 6:
-            match = MODULE_PATTERN.match(data[6])
-            if match:
-                objectId = ''.join(match.groups()[0:2])
-                if objectId:
-                    counts[objectId] = counts.get(objectId, 0) + 1
+            start_time = time.ctime(float(data[0]))
+        match = MODULE_PATTERN.match(data[8])
+        if match:
+            objectId = ''.join(match.groups()[0:2])
+            if objectId:
+                counts[objectId] = counts.get(objectId, 0) + 1
     else:
-        end_time = DateTime(' '.join(data[3:5])[1:-1])
+        end_time = time.ctime(float(data[0]))
 
     f.close()
     return counts, start_time, end_time
 
 if __name__ == '__main__':
     import sys
-    import transaction
-    portal = app.objectValues('Plone Site')[0]
 
     for fname in sys.argv[1:]:
 
-        increment, s_time, e_time = parseZ2Log(fname)
+        increment, s_time, e_time = parseSquidLog(fname)
 
         # Filter out hits for objects that don't actually exist
         for objectId in increment.keys():
-            if not portal.content.hasRhaptosObject(objectId):
+            if not app.plone.content.hasRhaptosObject(objectId):
                 del increment[objectId]
-        objids=portal.content.objectIds(['Version Folder','ModuleVersionFolder'])
+        objids=app.plone.content.objectIds(['Version Folder','ModuleVersionFolder'])
         for objid in objids:
             if not increment.has_key(objid):
                 increment[objid]=0
                 
-        portal.portal_hitcount.incrementCounts(increment, DateTime(s_time), DateTime(e_time))
-        transaction.commit()
+        app.plone.portal_hitcount.incrementCounts(increment, DateTime(s_time), DateTime(e_time))
+        get_transaction().commit()
         print "Updated logs for %s - %s" % (s_time, e_time)
