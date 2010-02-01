@@ -1,3 +1,6 @@
+HitCountTool-0.10
+  - generic setup refactor. Rhaptos 2.0 release
+
 HitCountTool-0.9.1
   - Change regex to handle rewritten squid 2.7 logfiles.
 
