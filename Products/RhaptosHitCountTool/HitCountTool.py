@@ -62,9 +62,12 @@ class HitCountTool(UniqueObject, SimpleItem):
         self._recent_daily_averages = []
         self._daily_averages = []
         self._startdate = self._inc_begin = self._inc_end = DateTime.DateTime()
-        objs = self.content.objectValues(['Version Folder','Module Version Folder'])
-        for ob in objs:
-            self.registerObject(ob.id,ob.created())
+        try:
+            objs = self.content.objectValues(['Version Folder','Module Version Folder'])
+            for ob in objs:
+                self.registerObject(ob.id,ob.created())
+        except AttributeError:
+            pass
 
     def registerObject(self, objectId, published_date):
         """Register an object with the HitCountTool"""
