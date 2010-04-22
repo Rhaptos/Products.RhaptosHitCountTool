@@ -62,12 +62,13 @@ class HitCountTool(UniqueObject, SimpleItem):
         self._recent_daily_averages = []
         self._daily_averages = []
         self._startdate = self._inc_begin = self._inc_end = DateTime.DateTime()
-        try:
-            objs = self.content.objectValues(['Version Folder','Module Version Folder'])
-            for ob in objs:
-                self.registerObject(ob.id,ob.created())
-        except AttributeError:
-            pass
+        objs = self.content.objectValues(['Version Folder','Module Version Folder'])
+        for ob in objs:
+            try:
+                self.registerObject(ob.id,ob.latest.created())
+            except IndexError:
+                # Bad object in content?
+                pass 
 
     def registerObject(self, objectId, published_date):
         """Register an object with the HitCountTool"""
@@ -132,6 +133,11 @@ class HitCountTool(UniqueObject, SimpleItem):
             
             hits._daily_average = (avg, recent_avg)
 
+        self._recalcDependentCounts()
+           
+
+    def _recalcDependentCounts():
+        """Recalculate the cached lists of hit stats based on the updated cached totals"""
         rec_items = [(id, hits.recent) for (id, hits) in self._hits.items()]
         rec_items.sort(lambda a,b: cmp(b[1],a[1]))
         self._recent_hit_counts = rec_items
@@ -140,15 +146,15 @@ class HitCountTool(UniqueObject, SimpleItem):
         items.sort(lambda a,b: cmp(b[1],a[1]))
         self._hit_counts = items
         
-        rec_items = [(id, hits.avgPerDay(True)) for (id, hits) in self._hits.items()]
-        rec_items.sort(lambda a,b: cmp(b[1],a[1]))
-        self._recent_daily_averages = rec_items
+        rec_items_avg = [(id, hits.avgPerDay(True)) for (id, hits) in self._hits.items()]
+        rec_items_avg.sort(lambda a,b: cmp(b[1],a[1]))
+        self._recent_daily_averages = rec_items_avg
         
-        items = [(id, hits.avgPerDay(False)) for (id, hits) in self._hits.items()]
-        items.sort(lambda a,b: cmp(b[1],a[1]))
-        self._daily_averages = items
+        items_avg = [(id, hits.avgPerDay(False)) for (id, hits) in self._hits.items()]
+        items_avg.sort(lambda a,b: cmp(b[1],a[1]))
+        self._daily_averages = items_avg
 
-        total_objects = len(self.listRegisteredObjects())
+        total_objects = len(self._hits)
         if total_objects:
             object_ranks, counts = zip(*items)
             object_ranks = list(object_ranks)
