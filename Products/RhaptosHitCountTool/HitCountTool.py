@@ -8,6 +8,8 @@ This software is subject to the provisions of the GNU Lesser General
 Public License Version 2.1 (LGPL).  See LICENSE.txt for details.
 """
 
+from zope.interface import implements
+
 import zLOG
 import AccessControl
 from Products.CMFCore.utils import UniqueObject
@@ -24,7 +26,7 @@ import pickle, StringIO
 
 class HitCountTool(UniqueObject, SimpleItem):
 
-    __implements__ = (IHitCountTool)
+    implements(IHitCountTool)
 
     id = 'portal_hitcount'
     meta_type = 'HitCount Tool'
