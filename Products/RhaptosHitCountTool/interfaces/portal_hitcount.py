@@ -3,12 +3,7 @@
 
 """ File system import interface"""
 
-from Interface import Attribute
-try:
-    from Interface import Interface
-except ImportError:
-    # for Zope versions before 2.6.0
-    from Interface import HitCount as Interface
+from zope.interface import Attribute, Interface
 
 class portal_hitcount(Interface):
     """Defines an interface for a tool that converts content to a PDF file"""
