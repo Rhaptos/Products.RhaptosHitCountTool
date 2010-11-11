@@ -42,7 +42,7 @@ i18n by sanca
 	    </tr>
 	<tr>
 	  <td class="cnx_before" valign="top" i18n:translate="text_contentstats_TopTableRow2Part1">Popularity&#160;rank:</td>
-	  <td valign="top" i18n:translate="text_contentstats_TopTableRow2Part2"><strong tal:content="w_rank" i18n:name="PopularityFractionTop">[weekly rank]</strong> of <strong tal:content="count" i18n:name="TotalObjectsTop">[count]</strong> total modules and courses*<span i18n:name="TopComment"><div class="comment" i18n:translate="description_contentstats_ContentHitsTop">(This module gets more hits than <strong tal:content="python:'%.2f%%'%w_percentile" i18n:name="HitPercentageTop">[percentile]</strong> of the content)</div></span>
+	  <td valign="top" i18n:translate="text_contentstats_TopTableRow2Part2"><strong tal:content="w_rank" i18n:name="PopularityFractionTop">[weekly rank]</strong> of <strong tal:content="count" i18n:name="TotalObjectsTop">[count]</strong> total modules and collections*<span i18n:name="TopComment"><div class="comment" i18n:translate="description_contentstats_ContentHitsTop">(This content gets more hits than <strong tal:content="python:'%.2f%%'%w_percentile" i18n:name="HitPercentageTop">[percentile]</strong> of the content)</div></span>
 	  </td>
 	</tr>
 	    <tr>
@@ -56,8 +56,8 @@ i18n by sanca
 	    </tr>
 	    <tr>
 	      <td class="cnx_before" valign="top" i18n:translate="text_contentstats_BottomTableRow2Part1">Popularity&#160;rank:</td>
-	      <td i18n:translate="text_contentstats_BottomTableRow2Part2"><strong tal:content="rank" i18n:name="PopularityFractionBottom">[rank]</strong>  of <strong tal:content="count" i18n:name="TotalObjectsBottom">[count]</strong> total modules and courses*
-		<span i18n:name="BottomComment"><div class="comment" i18n:translate="description_contentstats_ContentHitsBottom">(This module gets more hits than <strong tal:content="python:'%.2f%%'%percentile" i18n:name="HitPercentageBottom">[percentile]</strong> of the content)</div></span>
+	      <td i18n:translate="text_contentstats_BottomTableRow2Part2"><strong tal:content="rank" i18n:name="PopularityFractionBottom">[rank]</strong>  of <strong tal:content="count" i18n:name="TotalObjectsBottom">[count]</strong> total modules and collections*
+		<span i18n:name="BottomComment"><div class="comment" i18n:translate="description_contentstats_ContentHitsBottom">(This content gets more hits than <strong tal:content="python:'%.2f%%'%percentile" i18n:name="HitPercentageBottom">[percentile]</strong> of the content)</div></span>
 	  </td>
 	</tr>
 	</tbody>
