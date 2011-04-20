@@ -1,3 +1,6 @@
+HitCountTool-0.12
+  - bugfix 2010: wording fix, example update scripts
+
 HitCountTool-0.11
   - template syntax error
 
